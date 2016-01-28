@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Using Lambdas Effectively in Java</title><meta name="twitter:card" content="summary" /><meta name="twitter:site" content="@eugenechung81" /><meta name="twitter:title" content="Using Lambdas Effectively in Java" /><meta name="twitter:description" content="One of the most powerful features python offers is lambdas which allow you to perform operations on a collection and create anonymous functions on the data set to filter, map (transform) or reduce...."><meta name="description" content="One of the most powerful features python offers is lambdas which allow you to perform operations on a collection and create anonymous functions on the data s..."><meta name="google-site-verification" content="epFgX0s_0RM3CdjwFcsewfXzPov2g8s9ZBOLyaIUH-o"><link rel="icon" href="/assets/favicon.png"><link rel="apple-touch-icon" href="/assets/touch-icon.png"><link rel="stylesheet" href="//code.cdn.mozilla.net/fonts/fira.css"><link rel="stylesheet" href="/assets/core.css"><link rel="canonical" href="/notes/using-lambdas"><link rel="alternate" type="application/atom+xml" title="Eugene Chung" href="/feed.xml" /></head><body><aside class="logo"> <a href="/"> <img src="http://www.gravatar.com/avatar/aa2431afa5a4869857376576dd395bca.png?s=80" class="gravatar"> </a> <span class="logo-prompt">Back to Home</span></aside><main> <noscript><style> article .footnotes { display: block; }</style></noscript><article><div class="center"><h1>Using Lambdas Effectively in Java</h1><time>May 13, 2015</time></div><div class="divider"></div><p>One of the most powerful features python offers is lambdas which allow you to perform operations on a collection and create anonymous functions on the data set to filter, map (transform) or reduce. Here’s a snippet of code that outlines converting a complex meta data structure filtering on a repeating group and extracting out the position and sorting it and converting it to a displayable list.</p><pre><code class="language-python">metas = get_rows('META')
+definition_row = filter(lambda r: get_str_val(r, 'display') == table_name, metas)[0]
+var_groups = definition_row['data']['LAYOUT'].values()
+var_groups = filter(lambda var_group: 'position' in var_group, var_groups) 
+var_groups = sorted(var_groups, key=lambda x: x['position']) 
+header_cap_ids = map(lambda var_group: var_group['display'], var_groups) 
+</code></pre><p>Now if we’re planning to do this in Java, it will be slightly more complicated and verbose. Without having Java 8 at our disposal (restricted by our app server version deployment), we’re limited to other frameworks (primarily LambaJ and Guava). LambaJ proved to be a little cumbersome and felt too integrated to the ORM model (similar to LINQ query) so Guava proved to be a better alternative. It is still a little verbose with with new anonymous classes being created per operation but it gets the gist what needs to be done.</p><pre><code class="language-java"> DataRow row = CollectionUtils.getFirst(ThriftDBUtils.getAllRows("META"));
+ List&lt;DataGroup&gt; groups = ThriftDataUtils.getGroups(row, "CONTENT", "LAYOUT");
+ List&lt;DataGroup&gt; filter = CollectionUtils.filter(groups, new Predicate&lt;DataGroup&gt;()
+ {
+  @Override
+  public boolean apply(DataGroup group)
+  {
+   String stringValue = ThriftDataUtils.getStringValue(group, "position");
+   return !StringUtils.isEmpty(stringValue);
+  }
+ });
+ CollectionUtils.sort(filter, new Comparator&lt;DataGroup&gt;()
+ {
+  @Override
+  public int compare(DataGroup group1, DataGroup group2)
+  {
+   long long1 = Long.parseLong(ThriftDataUtils.getStringValue(group1, "position"));
+   long long2 = Long.parseLong(ThriftDataUtils.getStringValue(group2, "position"));
+   return ComparisonChain.start()
+    .compare(long1, long2)
+    .result();
+  }
+ });
+ List&lt;String&gt; transform = CollectionUtils.transform(filter, new Function&lt;DataGroup, String&gt;()
+ {
+  @Override
+  public String apply(DataGroup group)
+  {
+   String stringValue = ThriftDataUtils.getStringValue(group, "display");
+   return stringValue;
+  }
+ });
+</code></pre><p>There is a word of caution submitted by the Guava team on excessive use of lambdas which can lead to confusing, unreadable and inefficient code when a simple iterative function will do. Concerning ourselves, I find it useful when performing series of operations that will change frequency and deals with converting or filtering on a complex data set.</p></article><div class="back"> <a href="/">Back</a></div></main></body></html>
