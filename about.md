@@ -3,11 +3,18 @@ layout: page
 title: About
 ---
 
-Hello.
+Hello. 
 
-My name is Eugene Chung.  This is my blog... 
+My name is Eugene Chung.  
 
-### Projects
+#### Projects
 
-* Parking Oracle - [app](http://parkingoracle.com/)
+* Parking Oracle - [info](http://parkingoracle.com/info), [app](http://parkingoracle.com/)
 * Cha-Ching - [info](https://eugenechung81.github.io/chaching2/), [demo](https://chaching.io/send) 
+
+#### Contact
+
+* [Email](mailto:eugene.chung.career@gmail.com)
+* [GitHub](https://github.com/eugenechung81)
+* [LinkedIn](https://www.linkedin.com/in/eugenechung)
+* Phone - (347) 987-0492
