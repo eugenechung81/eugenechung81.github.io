@@ -5,7 +5,7 @@ updated: 2016-01-28 22:43
 
 ## Tech Valley Center of Gravity IoT Hackathon 
 
-![alt text](assets/flamewardenteam.jpg)
+![alt text](http://eugenechung81.github.io/assets/flamewardenteam.jpg)
 
 Won: 
 
