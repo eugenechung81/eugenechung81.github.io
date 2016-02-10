@@ -14,3 +14,5 @@ http://parkingoracle.com/info
 
 App: 
 http://parkingoracle.com/
+
+I will be presenting this app as the Hack of the Month at the [New York Tech Meetup](http://www.meetup.com/ny-tech/)
