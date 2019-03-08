@@ -18,4 +18,3 @@ My name is Eugene Chung.
 * [Email](mailto:eugene.chung.career@gmail.com)
 * [GitHub](https://github.com/eugenechung81)
 * [LinkedIn](https://www.linkedin.com/in/eugenechung)
-* Phone - (347) 987-0492
